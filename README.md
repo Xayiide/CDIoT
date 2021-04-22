@@ -18,4 +18,4 @@ La FPGA se va a encargar de recoger los datos de los sensores y mandar
 órdenes a los actuadores, que en nuestro caso estarán representados por 
 LEDs.
 La ESP32 la utilizaremos para actuar como intermediario entre la FPGA y el
-usuario (para conectarse a Thingsboard o a la API de Telegram)
+usuario (para conectarse a Thingsboard o a la API de Telegram).
