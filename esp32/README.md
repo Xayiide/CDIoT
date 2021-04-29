@@ -7,3 +7,18 @@ Estará programada en microPython o en C, lo que mejor convenga
 
 # NodeMCU devkit 
 https://github.com/nodemcu/nodemcu-devkit-v1.0/blob/master/NODEMCU_DEVKIT_V1.0.PDF
+
+
+# TODOs
+
+## General
+ · UART comms
+
+## Actuadores
+ · Activar persianas  
+ · Activar Aire acondicionado  
+ · Activar calefacción
+
+## Umbrales
+ · Cambiar temperatura umbral  
+ · Cambiar luz umbral  
