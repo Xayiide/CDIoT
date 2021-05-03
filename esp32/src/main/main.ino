@@ -1,4 +1,4 @@
-#include <ESP8266WiFi.h>          // WiFi
+#include <ESP8266WiFi.h>          // ESP32: <WiFi.h>
 #include <WiFiClientSecure.h>
 #include <UniversalTelegramBot.h> // Telegram
 #include <Wire.h>
@@ -18,10 +18,24 @@ const int USERS[NUSERS] = {0,
                            0,
                            0}; // BORRAR ANTES DE PUSHEAR
 
+const unsigned long BOT_MTBS = 1000;
+unsigned long bot_lasttime;
 
-const char *ssid = ""; // WiFi SSID
-const char *pass = ""; // WiFi password
+X509List cert(TELEGRAM_CERTIFICATE_ROOT);
+WiFiClientSecure secured_client;
+UniversalTelegramBot bot(BOT_TOKEN, secured_client);
 
+
+struct status {
+  char st;       // 4 bits (2 persianas, 1 aire, 1 calef)
+  int  t_aire;   // 8 bits temperatura aire
+  int  t_calef;  // 8 bits temperatura calef
+};
+
+
+const char *SSID = ""; // WiFi SSID
+const char *PASS = ""; // WiFi password
+struct status stats;
 
 void conectwifi(const char *, const char *);
 void handleMsg(int);
@@ -34,28 +48,39 @@ bool checkUser(String);
 void setup() {
   Serial.begin(115200);
 
-  connectwifi(ssid, pass);
-
-  
+  connectwifi(SSID, PASS);
 }
 
 void loop() {
-
+  delay(1000);
+/*
+  unsigned long m = millis();
+  Serial.print(m);
+  Serial.print("  -  ");
+  Serial.print(bot_lasttime);
+  Serial.print("  =  ");
+  Serial.println(m - bot_lasttime);
+*/
+  if (millis() - bot_lasttime > BOT_MTBS) {
+    Serial.println("Entering...");
+    int numNewMessages = bot.getUpdates(bot.last_message_received + 1);
+    while (numNewMessages) {
+      handleMsg(numNewMessages);
+      numNewMessages = bot.getUpdates(bot.last_message_received + 1);
+    }
+  }
+  bot_lasttime = millis();
 }
 
 
-
 void connectwifi(const char *ssid, const char *pass) {
-  WiFi.mode(WIFI_STA);
-  WiFi.disconnect();
-
-  delay(100);
+  configTime(0, 0, "pool.ntp.org");
+  secured_client.setTrustAnchors(&cert);
   
   WiFi.begin(ssid, pass);
   Serial.print("\t\t[*] Connecting to: ");
-  Serial.print(WiFi.SSID());
+  Serial.print(SSID);
 
-  int i = 0;
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
@@ -66,10 +91,11 @@ void connectwifi(const char *ssid, const char *pass) {
   Serial.println("]");
 } // connectwifi
 
-
 void handleMsg(int numMsgs) {
+  Serial.print("[handlMsg] ");
+  Serial.println(numMsgs);
   for (int i = 0; i < numMsgs; i++) {
-    String chatId = String(bot.messages[i].char_id);
+    String chatId = bot.messages[i].chat_id;
     if (checkUser(chatId) == 0) {
       bot.sendMessage(chatId, "Unautorhized User", "");
       continue;
@@ -79,19 +105,39 @@ void handleMsg(int numMsgs) {
     String from = bot.messages[i].from_name;
 
     if (text == "/start") {
-      // TODO: No prioritario pero queda bien
+      Serial.println("/start");
+      bot.sendMessage(chatId, "Hello!");
     }
 
     if (text == "/check") {
-      // TODO: imprimir estado del sistema
+      Serial.println("/check");
+      bot.sendMessage(chatId, "Checking status...");
+    }
+
+    if (text == "/subirPersianas" || text == "/bajarPersianas") {
+      /* Pide el estado de las persianas a la FPGA" 
+      int st = stpersianas() */
+      if (text == "/subirPersianas") {
+        Serial.println("/subirPersianas");
+        /* enviar orden de subir las persianas
+        mvpersianas(up) */
+        bot.sendMessage(chatId, "Subiendo persianas");
+      }
+      if (text == "/bajarPersianas") {
+        Serial.println("/bajarPersianas");
+        /* enviar orden de bajar las persianas
+        mvpersianas(down) */
+        bot.sendMessage(chatId, "Bajando persianas");
+      }
     }
   }
 }
 
-bool checkUser(String chatId) {
+bool checkUser(String c) {
   bool OK = false;
+  int chatId = c.toInt();
 
-  for (int i = 0; i < NUSERS) {
+  for (int i = 0; i < NUSERS; i++) {
     if (chatId == USERS[i])
       OK = true;
   }
