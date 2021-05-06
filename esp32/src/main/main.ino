@@ -2,6 +2,7 @@
 #include <WiFiClientSecure.h>
 #include <UniversalTelegramBot.h> // Telegram
 #include <Wire.h>
+#include <SoftwareSerial.h>
 // #include <NTPClient.h>         // Tiempo
 // #include <ArduinoJson.h>
 
@@ -11,6 +12,7 @@
 #define MCULED 2  // D4
 #define FLASH  0  // D3
 #define NUSERS 4
+#define BAUDRT 115200
 
 
 const int USERS[NUSERS] = {0,
@@ -24,43 +26,53 @@ unsigned long bot_lasttime;
 X509List cert(TELEGRAM_CERTIFICATE_ROOT);
 WiFiClientSecure secured_client;
 UniversalTelegramBot bot(BOT_TOKEN, secured_client);
+SoftwareSerial SUART(4, 5); // Check pins acording to board
 
+byte stat = 0;
 
-struct status {
-  char st;       // 4 bits (2 persianas, 1 aire, 1 calef)
-  int  t_aire;   // 8 bits temperatura aire
-  int  t_calef;  // 8 bits temperatura calef
+enum stPers {
+  SUBIDAS  = 0;
+  SUBIENDO = 1;
+  BAJANDO  = 2;
+  BAJADAS  = 3;
+};
+
+struct stats {
+  enum stPers stP;
+  bool aire;
+  bool calef;
+  byte temp;
 };
 
 
 const char *SSID = ""; // WiFi SSID
 const char *PASS = ""; // WiFi password
-struct status stats;
+struct stats stats;
 
 void conectwifi(const char *, const char *);
 void handleMsg(int);
 bool checkUser(String);
-
-
-
+void rcv();
+void snd();
+void pfrcv(byte);
+void decod(byte);
+void decodst(byte);
+void decoddat(byte);
+void decodprs(byte);
+void decodac(byte);
+void decodtemp(byte);
 
 
 void setup() {
-  Serial.begin(115200);
+  SUART.begin(BAUDRT);
+  Serial.begin(BAUDRT);
 
   connectwifi(SSID, PASS);
 }
 
 void loop() {
   delay(1000);
-/*
-  unsigned long m = millis();
-  Serial.print(m);
-  Serial.print("  -  ");
-  Serial.print(bot_lasttime);
-  Serial.print("  =  ");
-  Serial.println(m - bot_lasttime);
-*/
+
   if (millis() - bot_lasttime > BOT_MTBS) {
     Serial.println("Entering...");
     int numNewMessages = bot.getUpdates(bot.last_message_received + 1);
@@ -142,6 +154,86 @@ bool checkUser(String c) {
       OK = true;
   }
   return OK;
+}
+
+void rcv() {
+  byte n = SUART.available();
+  if (n != 0) { // n != 0 -> data arrived
+    char x = SUART.read();
+    pfrcv(x);
+    decod(x);
+  }
+  n = 0;
+}
+
+void snd() {
+  // TODO
+}
+
+void pfrcv(byte x) {
+  Serial.print("<[");
+  Serial.print(x, BIN);
+  Serial.print("-0x");
+  Serial.print(x, HEX);
+  Serial.println("]");
+}
+
+
+void decod(byte x) {
+  // MSB -> 1 = packet is status data
+  //     -> 0 = packet is sensor data
+  bitRead(x, 7) ? decodst(x) : decoddat(x);
+}
+
+void decodst(byte x) {
+  decodprs(x);
+  decodac(x);
+  decodtemp(x);
+}
+
+void decodprs(byte x) {
+  if (!bitRead(x, 6) && !bitRead(x, 5)) { // 00
+    st.stP = SUBIDAS;
+    Serial.println("Subidas");
+  }
+  else if (!bitRead(x, 6) && bitRead(x, 5)) { // 01
+    st.stP = SUBIENDO;
+    Serial.println("Subiendo");
+  }
+  else if (bitRead(x, 6) && !bitRead(x, 5)) { // 10
+    st.stP = BAJANDO;
+    Serial.println("Bajando");
+  }
+  else if (bitRead(x, 6) && bitRead(x, 5)) { // 11
+    st.stP = BAJADAS;
+    Serial.println("Bajadas");
+  }
+}
+
+void decodac(byte x) {
+  if (bitRead(x, 4)) {
+    st.aire  = false;
+    st.calef = true;
+    Serial.println("1 -> calef");
+  } else {
+    st.aire  = true;
+    st.calef = false;
+    Serial.println("0 -> aire");
+  }
+}
+
+void decodtemp(byte x) {
+  byte tmp = 0x00;
+  for (int i = 3; i > 0; i--) {
+    tmp = tmp | bitRead(x, i);
+    tmp <<= 1;
+  }
+  tmp += 14;
+  st.temp = tmp;
+  Serial.print("tmp: 0b");
+  Serial.print(tmp, BIN);
+  Serial.print(", ");
+  Serial.println(tmp, DEC);
 }
 
 
