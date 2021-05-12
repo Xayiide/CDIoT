@@ -3,7 +3,7 @@
 #include "include/utils.h"
 
 
-bool checkUser(Stirng c) {
+bool checkUser(String c) {
 	int chatId = c.toInt();
 
 	for (int i = 0; i < NUSERS; i++)
