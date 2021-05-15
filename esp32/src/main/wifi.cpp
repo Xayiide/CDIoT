@@ -71,6 +71,8 @@ void handleMsg(int numMsgs) {
     else if (text == "/check") {
       Serial.println("/check");
       bot.sendMessage(chatId, "Checking status...");
+      String st = ststring();
+      bot.sendMessage(chatId, st);
     }
 
     else if (text == "/subirPersianas") {

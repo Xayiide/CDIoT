@@ -2,11 +2,11 @@
 #define COMMON_H
 
 #define BAUDRATE  115200
-#define BOT_TOKEN "" // VACIAR ANTES DE PUSHEAR
+#define BOT_TOKEN "1775136839:AAER8TlpyZS8IzlzSjYaqiCZoEna9HOfzwY" // VACIAR ANTES DE PUSHEAR
 #define NUSERS    4
 
-#define WSSID   ""         // main.ino
-#define WPASS   ""  // main.ino
+#define WSSID   "Yaku"         // main.ino
+#define WPASS   "pawpawpaw22"  // main.ino
 #define NTPPOOL "pool.ntp.org" // WiFi.cpp
 
 enum stPers {

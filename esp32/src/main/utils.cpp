@@ -3,7 +3,7 @@
 #include "include/utils.h"
 
 
-struct stats st;
+struct stats st; // extern
 
 bool checkUser(String c) {
 	int chatId = c.toInt();
@@ -72,4 +72,33 @@ void decodtemp(byte x) {
 }
 
 void decoddat(byte x) {
+}
+
+String ststring() {
+  String ststring = "";
+  ststring += "Persianas ";
+  switch(st.stP) {
+    case SUBIENDO:
+      ststring += "subiendo.";
+      break;
+    case SUBIDAS:
+      ststring += "subidas.";
+      break;
+    case BAJADAS:
+      ststring += "bajadas.";
+      break;
+    case BAJANDO:
+      ststring += "bajando.";
+      break;
+  }
+  if (st.aire) {
+    ststring += "\nAire: ";
+    ststring += String(st.temp);
+    ststring += ".";
+  } else if (st.calef) {
+    ststring += "\nCalefacción: ";
+    ststring += String(st.temp);
+    ststring += ".";
+  }
+  return ststring;
 }
