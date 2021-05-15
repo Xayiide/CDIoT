@@ -41,6 +41,17 @@ void connecttime() {
   Serial.println(now);
 }
 
+void checkUpdates() {
+  int numNewMessages = bot.getUpdates(bot.last_message_received + 1);
+
+  Serial.print("\t[+] Updates: ");
+  Serial.println(numNewMessages);
+  while (numNewMessages) {
+    handleMsg(numNewMessages);
+    numNewMessages = bot.getUpdates(bot.last_message_received + 1);
+  }
+}
+
 void handleMsg(int numMsgs) {
   for (int i = 0; i < numMsgs; i++) {
     String chatId = bot.messages[i].chat_id;
@@ -73,16 +84,7 @@ void handleMsg(int numMsgs) {
       bot.sendMessage(chatId, "Bajando Persianas");
       // Enviar orden de bajar las persianas a la FPGA
     }
-  }
-}
 
-void checkUpdates() {
-  int numNewMessages = bot.getUpdates(bot.last_message_received + 1);
-
-  Serial.print("\t[+] Updates: ");
-  Serial.println(numNewMessages);
-  while (numNewMessages) {
-    handleMsg(numNewMessages);
-    numNewMessages = bot.getUpdates(bot.last_message_received + 1);
+    
   }
 }

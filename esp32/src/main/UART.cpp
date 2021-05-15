@@ -10,14 +10,11 @@ void recv() {
 		byte x = Serial1.read();
 		pfrcv(x);
 	}
-	n = 0;
 }
-
 
 void send(byte x) {
 	Serial1.write(fpgastat); // extern stat (from common.h)
 }
-
 
 void pfrcv(byte x) {
 	Serial.print("<[");
