@@ -9,4 +9,6 @@ void decodprs(byte);
 void decodac(byte);
 void decodtemp(byte);
 
+String ststring();
+
 #endif // UTILS_H
