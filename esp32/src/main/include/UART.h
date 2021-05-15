@@ -5,5 +5,4 @@ void rcv();
 void snd();
 void pfrcv(byte);
 
-
 #endif // UART_H

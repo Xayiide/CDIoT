@@ -1,14 +1,10 @@
 #ifndef WIFI_H
 #define WIFI_H
 
-#include <WiFi.h>
-#include <WiFiClientSecure.h>
-#include <NTPClient.h>
-#include "common.h" // SSID and PASS
+void connectwifi();
+void connecttime();
 
-
-WiFiClientSecure secured_client;
-
-void connectwifi(const char *, const char *);
+void handleMsg(int);
+void checkUpdates();
 
 #endif // WIFI_H

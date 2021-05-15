@@ -1,8 +1,6 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#include <Arduino.h> // No se si hace falta esto
-
 bool checkUser(String);
 void decod(byte);
 void decodst(byte);

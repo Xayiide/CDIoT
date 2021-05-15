@@ -5,8 +5,9 @@
 #define BOT_TOKEN "" // VACIAR ANTES DE PUSHEAR
 #define NUSERS    4
 
-const char *SSID = ""; // WiFi SSID
-const char *PASS = ""; // WiFi password
+#define WSSID   ""         // main.ino
+#define WPASS   ""  // main.ino
+#define NTPPOOL "pool.ntp.org" // WiFi.cpp
 
 enum stPers {
 	SUBIDAS  = 0,
@@ -22,8 +23,8 @@ struct stats {
 	byte temp;
 };
 
-extern stats st;
-extern const int USERS[NUSERS];
-extern byte stat; // Mantiene el byte a enviar por la UART
+extern struct stats st; // utils.cpp
+extern const int USERS[NUSERS]; // main.ino
+extern byte fpgastat; // UART.cpp // Mantiene el byte a enviar por la UART
 
 #endif // COMMON_H

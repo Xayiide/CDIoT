@@ -4,16 +4,11 @@
 // #include <Wire.h>
 // #include <NTPClient.h>         // Tiempo
 // #include <ArduinoJson.h>
-
-#include "include/UART.h"
-#include "include/utils.h"
 #include "include/common.h"
-#include "include/telegram.h"
+#include "include/UART.h"
+#include "includmy_ide/utils.h"
 #include "include/wifi.h"
 
-#define ESPLED 16 // D0
-#define MCULED 2  // D4
-#define FLASH  0  // D3
 
 
 const int USERS[NUSERS] = {0,
@@ -25,7 +20,7 @@ void setup() {
   Serial1.begin(BAUDRATE);
   Serial.begin(BAUDRATE);
 
-  connectwifi(SSID, PASS);
+  connectwifi();
 }
 
 void loop() {

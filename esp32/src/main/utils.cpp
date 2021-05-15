@@ -3,6 +3,8 @@
 #include "include/utils.h"
 
 
+struct stats st;
+
 bool checkUser(String c) {
 	int chatId = c.toInt();
 
@@ -70,5 +72,4 @@ void decodtemp(byte x) {
 }
 
 void decoddat(byte x) {
-  continue; // TODO
 }
