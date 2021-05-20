@@ -6,6 +6,7 @@
 #include "include/common.h"
 #include "include/wifi.h"
 #include "include/utils.h"
+#include "include/UART.h"
 
 WiFiClientSecure secured_client;
 UniversalTelegramBot bot(BOT_TOKEN, secured_client);

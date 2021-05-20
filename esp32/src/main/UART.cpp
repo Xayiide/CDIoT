@@ -15,7 +15,7 @@ void urecv() {
 }
 
 void usend(byte x) {
-	Serial1.write(fpgastat); // extern stat (from common.h)
+	Serial1.write(x);
 }
 
 void pfrcv(byte x) {
