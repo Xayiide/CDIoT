@@ -1,8 +1,0 @@
-# Ignore everything
-*
-
-# But not the contents of project.srcs
-!*HC_SR04.srcs/*
-
-# Nor .gitignore
-!.gitignore
