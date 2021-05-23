@@ -1,10 +1,33 @@
+--------------------------------------------------------------------------------
+--
+--   FileName:         SPI_master.vhd
+--   Dependencies:     none
+--   Design Software:  Quartus II Version 9.0 Build 132 SJ Full Version
+--
+--   HDL CODE IS PROVIDED "AS IS."  DIGI-KEY EXPRESSLY DISCLAIMS ANY
+--   WARRANTY OF ANY KIND, WHETHER EXPRESS OR IMPLIED, INCLUDING BUT NOT
+--   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+--   PARTICULAR PURPOSE, OR NON-INFRINGEMENT. IN NO EVENT SHALL DIGI-KEY
+--   BE LIABLE FOR ANY INCIDENTAL, SPECIAL, INDIRECT OR CONSEQUENTIAL
+--   DAMAGES, LOST PROFITS OR LOST DATA, HARM TO YOUR EQUIPMENT, COST OF
+--   PROCUREMENT OF SUBSTITUTE GOODS, TECHNOLOGY OR SERVICES, ANY CLAIMS
+--   BY THIRD PARTIES (INCLUDING BUT NOT LIMITED TO ANY DEFENSE THEREOF),
+--   ANY CLAIMS FOR INDEMNITY OR CONTRIBUTION, OR OTHER SIMILAR COSTS.
+--
+--   Version History
+--   Version 1.0 7/23/2010 Scott Larson
+--     Initial Public Release
+--   Version 1.1 4/11/2013 Scott Larson
+--     Corrected ModelSim simulation error (explicitly reset clk_toggles signal)
+--    
+--------------------------------------------------------------------------------
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.std_logic_arith.all;
 USE ieee.std_logic_unsigned.all;
 
-ENTITY spi_master IS
+ENTITY SPI_master IS
   GENERIC(
     slaves  : INTEGER := 1;  --number of spi slaves
     d_width : INTEGER := 16); --data bus width
@@ -24,9 +47,9 @@ ENTITY spi_master IS
     mosi    : OUT    STD_LOGIC;                             --master out, slave in
     busy    : OUT    STD_LOGIC;                             --busy / data ready signal
     rx_data : OUT    STD_LOGIC_VECTOR(d_width-1 DOWNTO 0)); --data received
-END spi_master;
+END SPI_master;
 
-ARCHITECTURE logic OF spi_master IS
+ARCHITECTURE Arch_SPI_master OF SPI_master IS
   TYPE machine IS(ready, execute);                           --state machine data type
   SIGNAL state       : machine;                              --current state
   SIGNAL slave       : INTEGER;                              --slave selected for current transaction
@@ -146,4 +169,4 @@ BEGIN
       END CASE;
     END IF;
   END PROCESS; 
-END logic;
+END Arch_SPI_master;
