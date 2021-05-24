@@ -9,21 +9,25 @@ entity URF_pMOD is
     port (clk       : in  STD_LOGIC;                     -- System clock
           rst       : in  STD_LOGIC;                     -- Async active-low
           sensor_pw : in  STD_LOGIC;                     -- PW input from sensor
-          distance  : out STD_LOGIC_VECTOR(7 downto 0)); -- Binary distance output
+          led       : out STD_LOGIC);
+          --distance  : out STD_LOGIC_VECTOR(7 downto 0)); -- TODO -- Binary distance output 
 end URF_pMOD;
 
 
 architecture Arch_URF_pMOD of URF_pMOD is
     signal sensor_pw_prev : STD_LOGIC;
+    signal distaux  : STD_LOGIC_VECTOR (7 downto 0);
+    constant umbral : STD_LOGIC_VECTOR (7 downto 0) := "00000010";
+    
 begin
     process (clk, rst)
-        variable pw_counter : INTEGER := 0;
-        variable inch_counter     : INTEGER := 0;
+        variable pw_counter   : INTEGER := 0;
+        variable inch_counter : INTEGER := 0;
     begin
         if (rst = '0') then
             pw_counter   := 0;
             inch_counter := 0;
-            distance <= (others => '0');
+            --distance <= (others => '0'); -- TODO
         elsif (clk'event and clk = '1') then
             sensor_pw_prev <= sensor_pw;
             if (sensor_pw = '1') then
@@ -35,7 +39,15 @@ begin
                 end if;
             end if;
             if (sensor_pw_prev = '1' and sensor_pw = '0') then
-                distance <= std_logic_vector(to_unsigned(inch_counter, distance'LENGTH));
+                distaux <= std_logic_vector(to_unsigned(inch_counter, distaux'LENGTH));
+                if (distaux < umbral) then
+                    led <= '1';
+                    report "[++++++++++++++++++++++++++++++]";
+                else
+                    led <= '0';
+                    report "------------------------";
+                end if;
+                --distance <= distaux; -- TODO
                 pw_counter   := 0;
                 inch_counter := 0;
             end if;
