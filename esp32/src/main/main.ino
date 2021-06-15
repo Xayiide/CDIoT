@@ -12,21 +12,19 @@
 
 
 const int USERS[NUSERS] = {0,
-                           0,
-                           0,
                            0}; // BORRAR ANTES DE PUSHEAR
 
 void setup() {
   Serial1.begin(BAUDRATE);
   Serial.begin(BAUDRATE);
 
-  connectwifi();
+  connectWifi();
 }
 
 void loop() {
   delay(1000);
-  checkUpdates();
-  urecv();
+  checkTgUpdates();
+  UartRecv();
 }
 
  /* 0  -> D3  -> FLASH buttom

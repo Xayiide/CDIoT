@@ -1,10 +1,10 @@
 #ifndef WIFI_H
 #define WIFI_H
 
-void connectwifi();
-void connecttime();
+void connectWifi();
+void connectTime();
 
-void handleMsg(int);
-void checkUpdates();
+void handleTgMsg(int);
+void checkTgUpdates();
 
 #endif // WIFI_H

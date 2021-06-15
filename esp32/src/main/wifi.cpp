@@ -11,7 +11,7 @@
 WiFiClientSecure secured_client;
 UniversalTelegramBot bot(BOT_TOKEN, secured_client);
 
-void connectwifi() {
+void connectWifi() {
   Serial.print("\t\t[*] Connecting to: ");
   Serial.print(WSSID);
   WiFi.begin(WSSID, WPASS);
@@ -26,10 +26,10 @@ void connectwifi() {
 	Serial.print(WiFi.localIP());
 	Serial.println("]");
 
-  connecttime();
+  connectTime();
 }
 
-void connecttime() {
+void connectTime() {
   Serial.print("\t\t[*] Retrieving time: ");
   configTime(0, 0, NTPPOOL);
   time_t now = time(nullptr);
@@ -42,7 +42,7 @@ void connecttime() {
   Serial.println(now);
 }
 
-void checkUpdates() {
+void checkTgUpdates() {
   int numNewMessages = bot.getUpdates(bot.last_message_received + 1);
 
   Serial.print("\t[+] Updates: ");
@@ -53,7 +53,7 @@ void checkUpdates() {
   }
 }
 
-void handleMsg(int numMsgs) {
+void handleTgMsg(int numMsgs) {
   for (int i = 0; i < numMsgs; i++) {
     String chatId = bot.messages[i].chat_id;
     if (checkUser(chatId) == 0) {

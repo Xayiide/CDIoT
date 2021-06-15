@@ -9,14 +9,14 @@ const byte tmpcal  = 0b01000000; // 0b0100----
 const byte maxlux0 = 0b11000000; // 0b1100----
 const byte maxlux1 = 0b11010000; // 0b1101----
 
-void urecv();
-void usend();
-void pfrcv(byte);
+void uartRecv();
+void uartSend();
+void printRecv(byte);
 
-void subirpers();
-void bajarpers();
-void luxumbral();
-void tmpumbral();
-void dstumbral();
+void subirPers();
+void bajarPers();
+void luxUmbral();
+void tmpUmbral();
+void dstUmbral();
 
 #endif // UART_H

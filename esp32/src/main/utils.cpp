@@ -20,13 +20,13 @@ void decod(byte x) {
 	bitRead(x, 7) ? decodst(x) : decoddat(x);
 }
 
-void decodst(byte x) {
-  decodprs(x);
-  decodac(x);
-  decodtemp(x);
+void decodStats(byte x) {
+  decodPers(x);
+  decodAirC(x);
+  decodTemp(x);
 }
 
-void decodprs(byte x) {
+void decodPers(byte x) {
   if (!bitRead(x, 6) && !bitRead(x, 5)) { // 00
     st.stP = SUBIDAS;
     Serial.println("Subidas");
@@ -45,7 +45,7 @@ void decodprs(byte x) {
   }
 }
 
-void decodac(byte x) {
+void decodAirC(byte x) {
   if (bitRead(x, 4)) {
     st.aire  = false;
     st.calef = true;
@@ -57,7 +57,7 @@ void decodac(byte x) {
   }
 }
 
-void decodtemp(byte x) {
+void decodTemp(byte x) {
   byte tmp = 0x00;
   for (int i = 3; i > 0; i--) {
     tmp = tmp | bitRead(x, i);
@@ -71,10 +71,10 @@ void decodtemp(byte x) {
   Serial.println(tmp, DEC);
 }
 
-void decoddat(byte x) {
+void decodData(byte x) {
 }
 
-String ststring() {
+String statsStr() {
   String ststring = "";
   ststring += "Persianas ";
   switch(st.stP) {

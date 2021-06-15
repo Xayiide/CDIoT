@@ -3,7 +3,7 @@
 
 #define BAUDRATE  115200
 #define BOT_TOKEN "" // VACIAR ANTES DE PUSHEAR
-#define NUSERS    4
+#define NUSERS 2
 
 #define WSSID   ""         // main.ino
 #define WPASS   ""  // main.ino

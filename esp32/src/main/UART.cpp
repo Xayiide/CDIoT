@@ -5,20 +5,20 @@
 
 byte fpgastat;
 
-void urecv() { 
+void UartRecv() { 
 	byte n = Serial1.available();
 	if (n != 0) {
 		byte x = Serial1.read();
-		pfrcv(x);
+		printRecv(x);
 		decod(x);
 	}
 }
 
-void usend(byte x) {
+void UartSend(byte x) {
 	Serial1.write(x);
 }
 
-void pfrcv(byte x) {
+void PrintRcv(byte x) {
 	Serial.print("<[");
 	Serial.print(x, BIN);
 	Serial.print("-0x");

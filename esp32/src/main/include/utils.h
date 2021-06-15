@@ -3,12 +3,12 @@
 
 bool checkUser(String);
 void decod(byte);
-void decodst(byte);
-void decoddat(byte);
-void decodprs(byte);
-void decodac(byte);
-void decodtemp(byte);
+void decodStats(byte);
+void decodData(byte);
+void decodPers(byte);
+void decodAirC(byte);
+void decodTemp(byte);
 
-String ststring();
+String statsStr();
 
 #endif // UTILS_H
