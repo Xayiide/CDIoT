@@ -6,5 +6,6 @@ void connectTime();
 
 void handleTgMsg(int);
 void checkTgUpdates();
+void checkAlarm();
 
 #endif // WIFI_H

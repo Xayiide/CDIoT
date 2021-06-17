@@ -58,7 +58,7 @@ void handleTgMsg(int numMsgs) {
     String chatId = bot.messages[i].chat_id;
     if (checkUser(chatId) == 0) {
       bot.sendMessage(chatId, "Unauthorized user", "");
-      continue; // TODO ??
+      continue;
     }
 
     String text = bot.messages[i].text;
@@ -69,10 +69,10 @@ void handleTgMsg(int numMsgs) {
       bot.sendMessage(chatId, "Hello!");
     }
 
-    else if (text == "/check") {
+    else if (text == "/checkStatus") {
       Serial.println("/check");
       bot.sendMessage(chatId, "Checking status...");
-      String st = ststring();
+      String st = statsStr();
       bot.sendMessage(chatId, st);
     }
 
@@ -87,7 +87,15 @@ void handleTgMsg(int numMsgs) {
       bot.sendMessage(chatId, "Bajando Persianas");
       // Enviar orden de bajar las persianas a la FPGA
     }
-
-    
   }
 }
+
+void checkAlarm() {
+  if (st.alarm == true) {
+    for (int i = 0; i < NUSERS; i++) {
+      bot.sendMessage(USERS[i], "¡Alarma ON!");
+    }
+  }
+}
+
+

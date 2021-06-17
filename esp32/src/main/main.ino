@@ -24,7 +24,9 @@ void setup() {
 void loop() {
   delay(1000);
   checkTgUpdates();
-  UartRecv();
+  UartRecv(1); // Receive Data
+  UartRecv(2); // Receive Status
+  checkAlarm();
 }
 
  /* 0  -> D3  -> FLASH buttom

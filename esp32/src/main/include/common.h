@@ -11,19 +11,25 @@
 
 enum stPers {
 	SUBIDAS  = 0,
-	SUBIENDO = 1,
-	BAJANDO  = 2,
-	BAJADAS  = 3
+	BAJADAS  = 1
 };
 
 struct stats {
 	enum stPers stP;
 	bool aire;
 	bool calef;
+	bool alarm;
 	byte temp;
 };
 
-extern struct stats st; // utils.cpp
+struct data {
+	byte  dist;
+	byte  luz;
+	float temp;
+};
+
+extern struct stats st;   // utils.cpp
+extern struct data datos; // utils.cpp
 extern const int USERS[NUSERS]; // main.ino
 extern byte fpgastat; // UART.cpp // Mantiene el byte a enviar por la UART
 
