@@ -1,13 +1,20 @@
 #ifndef UART_H
 #define UART_H
 
-const byte subirp  = 0b00000010;
-const byte bajarp  = 0b00000011;
+const byte cmdAireON    = 0b00010001;
+const byte cmdAireOFF   = 0b00010000;
+const byte cmdCalefON   = 0b00010101;
+const byte cmdCalefOFF  = 0b00010100;
+const byte cmdTempAUTO  = 0b00011000;
 
-const byte tmpair  = 0b10000000; // 0b1000----
-const byte tmpcal  = 0b01000000; // 0b0100----
-const byte maxlux0 = 0b11000000; // 0b1100----
-const byte maxlux1 = 0b11010000; // 0b1101----
+const byte cmdSubirP = 0b00100001;
+const byte cmdBajarP = 0b00100000;
+const byte cmdAutoP  = 0b00110000;
+
+const byte umbralTMP = 0b01000000;
+const byte umbralLUZ = 0b10000000;
+
+
 
 void UartRecv(int n);
 void UartSend(int n, byte x);

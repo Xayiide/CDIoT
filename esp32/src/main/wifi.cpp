@@ -1,3 +1,4 @@
+//A
 //#include <Arduino.h>
 #include <UniversalTelegramBot.h>
 #include <WiFi.h>
@@ -70,23 +71,83 @@ void handleTgMsg(int numMsgs) {
     }
 
     else if (text == "/checkStatus") {
-      Serial.println("/check");
+      Serial.println("/checkStatus");
       bot.sendMessage(chatId, "Checking status...");
       String st = statsStr();
       bot.sendMessage(chatId, st);
     }
 
+    else if (text == "/checkSensors") {
+      Serial.println("/checkSensors");
+      bot.sendMessage(chatId, "Checking sensors...");
+      String st = sensorStr();
+      bot.sendMessage(st);
+    }
+
+    else if (text == "/aireON") {
+      Serial.println("/aireON");
+      bot.sendMessage(chatId, "Aire acondicionado encendido");
+      UartSend(2, cmdAireON);
+    }
+
+    else if (txt == "/aireOFF") {
+      Serial.println("/aireOFF");
+      bot.sendMessage(chatId, "Aire acondicionado apagado");
+      UartSend(2, cmdAireOFF);
+    }
+
+    else if (txt == "calefON") {
+      Serial.println("/calefON");
+      bot.sendMessage(chatId, "Calefacción encendida");
+      UartSend(2, cmdCalefON);
+    }
+
+    else if (txt == "calefOFF") {
+      Serial.println("/calefOFF");
+      bot.sendMessage(chatId, "Calefacción apagada");
+      UartSend(2, cmdCalefOFF);
+    }
+
+    else if (txt == "tmpAUTO") {
+      Serial.println("/tmpAUTO");
+      bot.sendMessage(chatId, "Calefacción automática");
+      UartSend(2, cmdTempAUTO);
+
     else if (text == "/subirPersianas") {
       Serial.println("/subirPersianas");
       bot.sendMessage(chatId, "Subiendo Persianas");
-      // Enviar orden de subir las persianas a la FPGA 
+      UartSend(2, cmdSubirP);
     }
 
     else if (text == "/bajarPersianas") {
       Serial.println("/bajarPersianas");
       bot.sendMessage(chatId, "Bajando Persianas");
-      // Enviar orden de bajar las persianas a la FPGA
+      UartSend(2, cmdBajarP);
     }
+
+    else if (text == "/persianasAUTO") {
+      Serial.println("/PersianasAUTO");
+      bot.sendMessage(chatId, "Persianas automáticas");
+      UartSend(2, cmdAutoP);
+    }
+
+    else if (text.substring(0, 9) == "/umbralTmp") {
+      int tmp = toInt(text.substring(11));
+      if (tmp < 14 or tmp > 29) {
+        bot.sendMessage(chatId, "Rango: [15 - 29]")
+      } else {
+        byte b = byte(tmp);
+        b -= 0xFE; // Restamos 14
+        byte aux = umbralTMP;
+        aux |= b;
+        UartSend(2, aux);
+      }
+    }
+
+    // TODO: implementar umbral luz que es un poco toston
+    else if (text.substring(0, 9) == "/umbralLuz") {
+    }
+
   }
 }
 

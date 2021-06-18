@@ -5,7 +5,8 @@
 enum MachineStates {
   RCVDIST,
   RCVLUZ,
-  RCVTMP
+  RCVTEMP,
+  RCVHEAD
 };
 
 
@@ -14,6 +15,7 @@ struct data datos; // extern
 struct MachineStates states;
 byte lastByte = 0x00;
 
+int tempBytesRead = 0;
 
 bool checkUser(String c) {
 	int chatId = c.toInt();
@@ -93,8 +95,35 @@ void decodTemp(byte x) {
 
 void decodData(byte currByte) {
   if (lastByte == 0x00 && currByte == 0xFF) {
-
+    status = RCVDIST;
+    tempBytesRead = 0;
   }
+  switch (status) {
+  case RCVDIST:
+    datos.dist = currByte;
+    status = RCVLUZ;
+    break;
+  case RCVLUZ:
+    datos.luz = currByte;
+    status = RCVTEMP;
+    break;
+  case RCVTEMP:
+    if (tempBytesRead == 4) {
+      tempBytesRead = 0;
+      status = RCVHEAD;
+      break;
+    }
+    dist.temp << 8;
+    dist.temp |= currByte;
+    tempBytesRead++;
+    break;
+  }
+  lastByte = currByte;
+}
+
+byte tmpfix(int num) {
+  /* num is a number between 14 and 29 */
+  byte b = (byte) num;
 }
 
 String statsStr() {
@@ -119,3 +148,9 @@ String statsStr() {
   }
   return ststring;
 }
+
+String sensorStr() {
+  String sensstr = "";
+  return sensstr;
+}
+
