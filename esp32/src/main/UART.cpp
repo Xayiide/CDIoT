@@ -11,16 +11,16 @@ void UartRecv(int n) {
 		z = Serial1.available();
 		if (z != 0) {
 			x = Serial1.read();
-			printRecv(x);
-			decodDat(x);
+			PrintRecv((byte) x);
+			// decodData((byte) x);
 		}
 	}
 	if (n == 2) { // UART 2 - Status
 		z = Serial2.available();
 		if (z != 0) {
 			x = Serial2.read();
-			printRecv(x);
-			decodStats(x);
+			PrintRecv((byte) x);
+			decodStats((byte) x);
 		}
 	}
 }
@@ -32,11 +32,10 @@ void UartSend(int n, byte x) {
 		Serial2.write(x); // o Software Serial UART o lo que sea
 }
 
-void PrintRcv(byte x) {
+void PrintRecv(byte x) {
 	Serial.print("<[");
 	Serial.print(x, BIN);
 	Serial.print("-0x");
 	Serial.print(x, HEX);
 	Serial.println("]>");
 }
-

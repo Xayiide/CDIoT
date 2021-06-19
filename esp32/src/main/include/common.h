@@ -22,14 +22,14 @@ struct stats {
 	byte temp;
 };
 
-struct data {
+struct sdata {
 	byte  dist;
 	byte  luz;
 	float temp;
 };
 
 extern struct stats st;   // utils.cpp
-extern struct data datos; // utils.cpp
+extern struct sdata datos; // utils.cpp
 extern const int USERS[NUSERS]; // main.ino
 extern byte fpgastat; // UART.cpp // Mantiene el byte a enviar por la UART
 

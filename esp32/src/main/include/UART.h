@@ -20,13 +20,4 @@ void UartRecv(int n);
 void UartSend(int n, byte x);
 void PrintRecv(byte);
 
-
-
-
-void subirPers();
-void bajarPers();
-void luxUmbral();
-void tmpUmbral();
-void dstUmbral();
-
 #endif // UART_H

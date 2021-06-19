@@ -11,8 +11,8 @@ enum MachineStates {
 
 
 struct stats st;   // extern
-struct data datos; // extern
-struct MachineStates states;
+struct sdata datos; // extern
+enum MachineStates state;
 byte lastByte = 0x00;
 
 int tempBytesRead = 0;
@@ -29,7 +29,7 @@ bool checkUser(String c) {
 void decod(byte x) {
 	// MSB = 1 -> packet is status data
 	//     = 0 -> packet is sensor data
-	bitRead(x, 7) ? decodStats(x) : decodDat(x);
+	bitRead(x, 7) ? decodStats(x) : decodData(x);
 }
 
 void decodStats(byte x) {
@@ -46,7 +46,7 @@ void decodPers(byte x) {
   }
   else {
     st.stP = BAJADAS;
-    Serial.println("Bajadas")
+    Serial.println("Bajadas");
   }
 }
 
@@ -58,7 +58,7 @@ void decodAirC(byte x) {
     st.aire  = false;
     if (bitRead(x, 5) == 0) { // [-00.....]
       st.calef = false;
-      Serial.println("Aire y Calef apagados")
+      Serial.println("Aire y Calef apagados");
     } else { // [-01.....]
       st.calef = true;
       Serial.println("Calef encendida");
@@ -92,39 +92,36 @@ void decodTemp(byte x) {
 }
 
 
-
+#if 0
 void decodData(byte currByte) {
   if (lastByte == 0x00 && currByte == 0xFF) {
-    status = RCVDIST;
+    state = RCVDIST;
     tempBytesRead = 0;
   }
-  switch (status) {
+  switch (state) {
   case RCVDIST:
     datos.dist = currByte;
-    status = RCVLUZ;
+    state = RCVLUZ;
     break;
   case RCVLUZ:
     datos.luz = currByte;
-    status = RCVTEMP;
+    state = RCVTEMP;
     break;
   case RCVTEMP:
     if (tempBytesRead == 4) {
       tempBytesRead = 0;
-      status = RCVHEAD;
+      state = RCVHEAD;
       break;
     }
-    dist.temp << 8;
-    dist.temp |= currByte;
+    datos.temp <<= 8;
+    datos.temp |= currByte;
     tempBytesRead++;
     break;
   }
   lastByte = currByte;
 }
+#endif
 
-byte tmpfix(int num) {
-  /* num is a number between 14 and 29 */
-  byte b = (byte) num;
-}
 
 String statsStr() {
   String ststring = "";
@@ -153,4 +150,3 @@ String sensorStr() {
   String sensstr = "";
   return sensstr;
 }
-

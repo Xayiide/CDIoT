@@ -10,9 +10,6 @@ void decodAirC (byte);
 void decodTemp (byte);
 void decodAlarm(byte);
 
-byte tmpfix(int);
-
-
 
 String statsStr();
 String sensorStr();

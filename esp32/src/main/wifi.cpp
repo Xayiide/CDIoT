@@ -49,7 +49,7 @@ void checkTgUpdates() {
   Serial.print("\t[+] Updates: ");
   Serial.println(numNewMessages);
   while (numNewMessages) {
-    handleMsg(numNewMessages);
+    handleTgMsg(numNewMessages);
     numNewMessages = bot.getUpdates(bot.last_message_received + 1);
   }
 }
@@ -81,7 +81,7 @@ void handleTgMsg(int numMsgs) {
       Serial.println("/checkSensors");
       bot.sendMessage(chatId, "Checking sensors...");
       String st = sensorStr();
-      bot.sendMessage(st);
+      bot.sendMessage(chatId, st);
     }
 
     else if (text == "/aireON") {
@@ -90,29 +90,30 @@ void handleTgMsg(int numMsgs) {
       UartSend(2, cmdAireON);
     }
 
-    else if (txt == "/aireOFF") {
+    else if (text == "/aireOFF") {
       Serial.println("/aireOFF");
       bot.sendMessage(chatId, "Aire acondicionado apagado");
       UartSend(2, cmdAireOFF);
     }
 
-    else if (txt == "calefON") {
+    else if (text == "calefON") {
       Serial.println("/calefON");
       bot.sendMessage(chatId, "Calefacción encendida");
       UartSend(2, cmdCalefON);
     }
 
-    else if (txt == "calefOFF") {
+    else if (text == "calefOFF") {
       Serial.println("/calefOFF");
       bot.sendMessage(chatId, "Calefacción apagada");
       UartSend(2, cmdCalefOFF);
     }
 
-    else if (txt == "tmpAUTO") {
+    else if (text == "tmpAUTO") {
       Serial.println("/tmpAUTO");
       bot.sendMessage(chatId, "Calefacción automática");
       UartSend(2, cmdTempAUTO);
-
+    }
+    
     else if (text == "/subirPersianas") {
       Serial.println("/subirPersianas");
       bot.sendMessage(chatId, "Subiendo Persianas");
@@ -132,9 +133,9 @@ void handleTgMsg(int numMsgs) {
     }
 
     else if (text.substring(0, 9) == "/umbralTmp") {
-      int tmp = toInt(text.substring(11));
+      int tmp = text.substring(11).toInt();
       if (tmp < 14 or tmp > 29) {
-        bot.sendMessage(chatId, "Rango: [15 - 29]")
+        bot.sendMessage(chatId, "Rango: [15 - 29]");
       } else {
         byte b = byte(tmp);
         b -= 0xFE; // Restamos 14
@@ -154,9 +155,7 @@ void handleTgMsg(int numMsgs) {
 void checkAlarm() {
   if (st.alarm == true) {
     for (int i = 0; i < NUSERS; i++) {
-      bot.sendMessage(USERS[i], "¡Alarma ON!");
+      bot.sendMessage(String(USERS[i]), "¡Alarma ON!");
     }
   }
 }
-
-

@@ -9,7 +9,7 @@
 #include "include/utils.h"
 #include "include/wifi.h"
 
-
+#define byte unsigned char
 
 const int USERS[NUSERS] = {0,
                            0}; // BORRAR ANTES DE PUSHEAR
