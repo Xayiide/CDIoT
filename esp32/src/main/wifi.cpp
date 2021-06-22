@@ -108,7 +108,7 @@ void handleTgMsg(int numMsgs) {
       UartSend(2, cmdCalefOFF);
     }
 
-    else if (text == "tmpAUTO") {
+    else if (text == "/tmpAUTO") {
       Serial.println("/tmpAUTO");
       bot.sendMessage(chatId, "Calefacción automática");
       UartSend(2, cmdTempAUTO);
